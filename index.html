@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+        <script src="libs/vue-resource.js"></script>
+    </head>
+    <body>
+        <br><br>
+        <div id="app">
+            <input @change="doSomething" v-model="name" type="text" placeholder="Enter your name">
+        </div>
+        <br><br>
+        <div id="app1">
+        <button @click="doSomething">Click me!</button>
+        </div>
+        <br><br>
+        <div id="app3">
+            <div id="content" v-if="visible">
+                BooHoo!
+            </div>
+            
+            <button @click="visible = !visible">Toogle</button>
+        </div>
+        <br><br>
+        <div id="app4">
+            <span>Social Networks:</span>
+            
+            <select id="networks">
+                <option v-for="(network, index) in socialNetworks" :value="index">{{ network }}</option>
+            </select>
+        </div>
+        <br><br>
+        <div id="app5">
+            <span>List of users:</span>
+        
+            <ul id="users">
+            <li v-for="user in users">{{ user.first_name }}</li>
+            </ul>
+        </div>
+        <div id="app6">
+            <span>List of menus:</span>
+        
+            <ul id="menus">
+                 <li v-for="menu in menus">{{ menu.MenuTitle }}</li>
+            </ul>
+        </div>
+          <script>
+                new Vue({
+                    el: '#app',
+    
+                    data: {
+                        name: ''
+                    },
+    
+                    methods: {
+                        doSomething() {
+                        alert('Hello '+ this.name);
+                    }
+                    }
+                });
+
+                new Vue({
+                    el: '#app1',
+
+                    methods: {
+                        doSomething() {
+                            alert('Clicked!');
+                        }
+                    }
+                });
+
+                new Vue({
+
+                    el: '#app3',
+
+                    data: {
+                        visible: true
+                    }
+
+                });
+
+                new Vue({
+
+                    el: '#app4',
+
+                    data: {
+                        socialNetworks: ['Facebook', 'Twitter', 'YouTube', 'Instagram', 'LinkedIn']
+                    }
+
+                });
+
+                new Vue({
+
+                    el: '#app5',
+
+                    data: {
+                        users: null
+                    },
+
+                    mounted: function() {
+                        this.$http.get('https://reqres.in/api/users').then(response => {
+                            this.users = response.body.data;
+                        });
+                    }
+
+                });
+
+                new Vue({
+
+                    el: '#app6',
+
+                    data: {
+                        menus: null
+                    },
+
+                    mounted: function() {
+                        this.$http.get('http://localhost:8080/api/getMenus').then(response => {
+                            this.menus = response.body;
+                            console.log(JSON.stringify(response.body));
+                        });
+                    }
+
+                });
+            </script>
+    </body>
+</html>
